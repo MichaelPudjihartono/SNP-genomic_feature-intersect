@@ -118,7 +118,12 @@ def feature(snps_codes3d_args, feature_dir_args, output_dir_args, logger):
                     bedtool_subfeature_instance_list.append(pybedtools.BedTool(f))
                     
                 snps_that_intersect_subfeature = snp_bed.intersect(bedtool_subfeature_instance_list, u=True).saveas(os.path.join(output_dir_args, f'snps_that_intersects_{subfeature}_subfeature_of_{feature}.bed'))
-                snps_that_intersect_subfeature = pd.read_csv(os.path.join(output_dir_args, f'snps_that_intersects_{subfeature}_subfeature_of_{feature}.bed'), sep="\t", header = None)
+                
+                if not os.path.getsize(os.path.join(output_dir_args, f'snps_that_intersects_{subfeature}_subfeature_of_{feature}.bed')) == 0:
+                    snps_that_intersect_subfeature = pd.read_csv(os.path.join(output_dir_args, f'snps_that_intersects_{subfeature}_subfeature_of_{feature}.bed'), sep="\t", header = None)
+                elif os.path.getsize(os.path.join(output_dir_args, f'snps_that_intersects_{subfeature}_subfeature_of_{feature}.bed')) == 0:
+                    snps_that_intersect_subfeature = pd.DataFrame({0:[],1:[],2:[]})
+                
                 os.remove(os.path.join(output_dir_args, f'snps_that_intersects_{subfeature}_subfeature_of_{feature}.bed'))
                 
                 snps_that_intersect_subfeature[f'{subfeature}'] = True
@@ -142,7 +147,12 @@ def feature(snps_codes3d_args, feature_dir_args, output_dir_args, logger):
                 bedtool_instance_list.append(pybedtools.BedTool(f))
                 
             snps_that_intersect_feature = snp_bed.intersect(bedtool_instance_list, u=True).saveas(os.path.join(output_dir_args, f'snps_that_intersect_{feature}.bed'))
-            snps_that_intersect_feature = pd.read_csv(os.path.join(output_dir_args, f'snps_that_intersect_{feature}.bed'), sep="\t", header = None)
+            
+            if not os.path.getsize(os.path.join(output_dir_args, f'snps_that_intersect_{feature}.bed')) == 0:
+                snps_that_intersect_feature = pd.read_csv(os.path.join(output_dir_args, f'snps_that_intersect_{feature}.bed'), sep="\t", header = None)
+            elif os.path.getsize(os.path.join(output_dir_args, f'snps_that_intersect_{feature}.bed')) == 0:
+                snps_that_intersect_feature = pd.DataFrame({0:[],1:[],2:[]})
+            
             os.remove(os.path.join(output_dir_args, f'snps_that_intersect_{feature}.bed'))
             
             snps_that_intersect_feature[f'{feature}'] = True
